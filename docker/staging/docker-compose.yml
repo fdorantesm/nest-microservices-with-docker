@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  auth:
+    container_name: auth
+    build: 
+      context: ../..
+      dockerfile: docker/staging/auth/Dockerfile
+    env_file: 
+      ../../apps/auth/.env
+    ports:
+      - ${COMPOSE_AUTH_PORT}:${COMPOSE_AUTH_PORT}
+    networks: 
+      lan0:
+        ipv4_address: ${COMPOSE_AUTH_IP}
+  http:
+    container_name: http
+    build: 
+      context: ../..
+      dockerfile: docker/staging/gateway/Dockerfile
+    env_file: 
+      ../../apps/gateway/.env
+    ports:
+      - ${COMPOSE_GATEWAY_PORT}:${COMPOSE_GATEWAY_PORT}
+    networks: 
+      lan0:
+        ipv4_address: ${COMPOSE_GATEWAY_IP}
+    depends_on: 
+      - auth
+    
+networks:
+  lan0:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: ${COMPOSE_SUBNET}

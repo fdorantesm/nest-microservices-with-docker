@@ -1,0 +1,7 @@
+.git
+.prettierrc
+.gitignore
+node_modules
+*.md
+*/docker/*
+dist
